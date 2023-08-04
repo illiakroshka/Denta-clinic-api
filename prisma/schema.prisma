@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model doctors {
+  doctor_id       Int     @id @default(autoincrement())
+  first_name      String  @db.VarChar(50)
+  last_name       String  @db.VarChar(50)
+  speciality      String  @db.VarChar(100)
+  experience      Int?
+  specialization  String? @db.VarChar(200)
+  degree          String? @db.VarChar(100)
+  about           String?
+  profile_picture String? @db.VarChar(255)
+}
