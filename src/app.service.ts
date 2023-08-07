@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import {DoctorsRepository} from './database/repositories/DoctorsRepository';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(private doctorsRepository: DoctorsRepository) {}
+
+  async getDoctors() {
+    return this.doctorsRepository.getDoctors();
   }
 }
