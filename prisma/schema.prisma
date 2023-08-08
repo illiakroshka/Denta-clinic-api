@@ -8,13 +8,22 @@ datasource db {
 }
 
 model doctors {
-  doctor_id       Int     @id @default(autoincrement())
-  first_name      String  @db.VarChar(50)
-  last_name       String  @db.VarChar(50)
-  speciality      String  @db.VarChar(100)
+  doctor_id       Int            @id @default(autoincrement())
+  first_name      String         @db.VarChar(50)
+  last_name       String         @db.VarChar(50)
+  speciality      String         @db.VarChar(100)
   experience      Int?
-  specialization  String? @db.VarChar(200)
-  degree          String? @db.VarChar(100)
+  specialization  String?        @db.VarChar(200)
+  degree          String?        @db.VarChar(100)
   about           String?
-  profile_picture String? @db.VarChar(255)
+  profile_picture String?        @db.VarChar(255)
+  appointments    appointments[]
+}
+
+model appointments {
+  appointment_id       Int       @id @default(autoincrement())
+  doctor_id            Int?
+  appointment_datetime DateTime? @db.Timestamp(6)
+  is_available         Boolean?
+  doctors              doctors?  @relation(fields: [doctor_id], references: [doctor_id], onDelete: NoAction, onUpdate: NoAction)
 }

@@ -9,4 +9,8 @@ export class AppController {
   getDoctors(): object {
     return this.appService.getDoctors();
   }
+  @Get('appointments')
+  getAppointments(): object {
+    return this.appService.getAppointments()
+  }
 }
