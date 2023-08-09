@@ -10,4 +10,12 @@ export class DoctorsRepository {
   async getDoctors() {
     return this.prisma.doctors.findMany();
   }
+
+  async getDoctorById(doctorId: number) {
+    return this.prisma.doctors.findUnique({
+      where:{
+        doctor_id: doctorId
+      }
+    })
+  }
 }

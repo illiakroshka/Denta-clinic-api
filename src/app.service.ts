@@ -13,11 +13,15 @@ export class AppService {
     return this.doctorsRepository.getDoctors();
   }
 
+  async getDoctorById(doctorId: number) {
+    return this.doctorsRepository.getDoctorById(doctorId);
+  }
+
   async getAppointments(){
     return this.appointmentRepository.getAppointments();
   }
 
-  async getDoctorAppointments(doctorId:number){
+  async getDoctorAppointments(doctorId: number){
     return this.appointmentRepository.getDoctorAppointments(doctorId);
   }
 }
