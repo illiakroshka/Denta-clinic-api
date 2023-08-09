@@ -14,4 +14,13 @@ export class AppointmentRepository {
       }
     });
   }
+
+  async getDoctorAppointments(doctorId: number){
+    return this.prisma.appointments.findMany({
+      where:{
+        doctor_id: doctorId,
+        is_available: true,
+      }
+    })
+  }
 }
