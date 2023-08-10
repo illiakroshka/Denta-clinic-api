@@ -28,6 +28,18 @@ export class AppController {
     return appointments;
   }
 
+  @Get('doctors/:id/appointments/:appointmentId')
+  async getAppointmentByID(
+    @Param('id', ParseIntPipe) doctorId: number,
+    @Param('appointmentId', ParseIntPipe) appointmentId: number,
+  ) {
+    const appointment = await this.appService.getAppointmentById(doctorId, appointmentId);
+    if (!appointment) {
+      throw new NotFoundException(`Information about appointment is not found`);
+    }
+    return appointment;
+  }
+
   @Get('appointments')
   getAppointments(): object {
     return this.appService.getAppointments();

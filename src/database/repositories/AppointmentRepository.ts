@@ -10,7 +10,7 @@ export class AppointmentRepository {
   async getAppointments() {
     return this.prisma.appointments.findMany({
       where:{
-        is_available: true
+        is_available: true,
       }
     });
   }
@@ -20,6 +20,15 @@ export class AppointmentRepository {
       where:{
         doctor_id: doctorId,
         is_available: true,
+      }
+    })
+  }
+
+  async getAppointmentById(doctorId : number, appointmentId: number){
+    return this.prisma.appointments.findUnique({
+      where:{
+        doctor_id: doctorId,
+        appointment_id: appointmentId,
       }
     })
   }

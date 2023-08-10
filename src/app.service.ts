@@ -21,7 +21,11 @@ export class AppService {
     return this.appointmentRepository.getAppointments();
   }
 
-  async getDoctorAppointments(doctorId: number){
+  async getDoctorAppointments(doctorId: number) {
     return this.appointmentRepository.getDoctorAppointments(doctorId);
+  }
+
+  async getAppointmentById(doctorId: number, appointmentId: number) {
+    return this.appointmentRepository.getAppointmentById(doctorId, appointmentId);
   }
 }
