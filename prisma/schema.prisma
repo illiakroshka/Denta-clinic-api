@@ -26,4 +26,14 @@ model appointments {
   appointment_datetime DateTime? @db.Timestamp(6)
   is_available         Boolean?
   doctors              doctors?  @relation(fields: [doctor_id], references: [doctor_id], onDelete: NoAction, onUpdate: NoAction)
+  clients              clients[]
+}
+
+model clients {
+  client_id      Int       @id @default(autoincrement())
+  first_name     String
+  last_name      String
+  phone_number   String
+  appointment_id Int?
+  appointment    appointments? @relation(fields: [appointment_id], references: [appointment_id], onDelete: NoAction, onUpdate: NoAction)
 }
