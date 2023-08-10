@@ -29,6 +29,18 @@ export class AppointmentRepository {
       where:{
         doctor_id: doctorId,
         appointment_id: appointmentId,
+        is_available: true,
+      }
+    })
+  }
+
+  async disableAppointment(appointmentId: number) {
+    await this.prisma.appointments.update({
+      where: {
+        appointment_id: appointmentId,
+      },
+      data: {
+        is_available: false,
       }
     })
   }

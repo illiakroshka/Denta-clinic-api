@@ -1,5 +1,16 @@
-import {Controller, Get, NotFoundException, Param, ParseIntPipe} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  UsePipes,
+  ValidationPipe
+} from '@nestjs/common';
 import { AppService } from './app.service';
+import {CreateClientDTO} from "./dtos/CreateClientDTO";
 
 @Controller()
 export class AppController {
@@ -43,5 +54,20 @@ export class AppController {
   @Get('appointments')
   getAppointments(): object {
     return this.appService.getAppointments();
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post('doctors/:id/appointments/:appointmentId')
+  async bookAppointment(
+    @Param('appointmentId', ParseIntPipe) appointmentId: number,
+    @Param('id', ParseIntPipe) doctorId: number,
+    @Body() dto: CreateClientDTO
+  ) {
+    const appointment = await this.appService.getAppointmentById(doctorId, appointmentId);
+    if (!appointment) {
+      throw new NotFoundException(`Information about appointment is not found`);
+    }
+    await this.appService.disableAppointment(appointmentId);
+    await this.appService.insertClient(dto, appointmentId);
   }
 }

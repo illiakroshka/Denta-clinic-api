@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import {DoctorsRepository} from './database/repositories/DoctorsRepository';
 import {AppointmentRepository} from './database/repositories/AppointmentRepository';
+import {ClientsRepository} from "./database/repositories/ClientsRepository";
 
 @Injectable()
 export class AppService {
   constructor(
     private doctorsRepository: DoctorsRepository,
-    private appointmentRepository: AppointmentRepository
+    private appointmentRepository: AppointmentRepository,
+    private clientRepository: ClientsRepository,
   ) {}
 
   async getDoctors() {
@@ -27,5 +29,13 @@ export class AppService {
 
   async getAppointmentById(doctorId: number, appointmentId: number) {
     return this.appointmentRepository.getAppointmentById(doctorId, appointmentId);
+  }
+
+  async insertClient(dto: object, appointmentId: number){
+    await this.clientRepository.insertClient(dto,appointmentId);
+  }
+
+  async disableAppointment(appointmentId: number) {
+    await this.appointmentRepository.disableAppointment(appointmentId);
   }
 }
