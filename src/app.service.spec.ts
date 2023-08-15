@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppService } from './app.service';
 import {DatabaseModule} from "./database/database.module";
 import { NotFoundException } from '@nestjs/common';
-import {CreateClientDTO} from "./dtos/CreateClientDTO";
+import { doctorStub } from "./stubs/doctor.stub";
+import { appointmentStub } from "./stubs/appointment.stub";
 
 describe('AppService', () => {
   let appService: AppService;
@@ -22,20 +23,9 @@ describe('AppService', () => {
 
   describe('getDoctorById',() => {
     it('should return a doctor when given a valid id',async () => {
-      const mockDoctor = {
-        "doctor_id": 1,
-        "first_name": "John",
-        "last_name": "Doe",
-        "speciality": "Cardiologist",
-        "experience": 10,
-        "specialization": "Heart Specialist",
-        "degree": "MD",
-        "about": "Dr. John Doe is a skilled cardiologist...",
-        "profile_picture": null
-      };
-      jest.spyOn(appService, 'getDoctorById').mockResolvedValue(mockDoctor);
+      jest.spyOn(appService, 'getDoctorById').mockResolvedValue(doctorStub());
       const result = await appService.getDoctorById(1);
-      expect(result).toEqual(mockDoctor);
+      expect(result).toEqual(doctorStub());
     })
 
     it('should throw NotFoundException when doctor is not found', async () => {
@@ -51,17 +41,11 @@ describe('AppService', () => {
 
   describe('getAppointmentByID',() => {
     it('should return an appointment when given valid doctorId and appointmentId', async () => {
-      const mockAppointment = {
-        "appointment_id": 1,
-        "doctor_id": 1,
-        "appointment_datetime": new Date("2023-08-30T15:45:00.000Z"),
-        "is_available": true
-      }
-      jest.spyOn(appService, 'getAppointmentById').mockResolvedValue(mockAppointment);
+      jest.spyOn(appService, 'getAppointmentById').mockResolvedValue(appointmentStub());
 
       const result = await appService.getAppointmentById(1,1);
 
-      expect(result).toEqual(mockAppointment);
+      expect(result).toEqual(appointmentStub());
     })
 
     it('should throw NotFoundException when appointment is not found', async () => {
