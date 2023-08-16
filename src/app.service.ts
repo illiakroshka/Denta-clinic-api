@@ -32,7 +32,7 @@ export class AppService {
   }
 
   async insertClient(dto: object, appointmentId: number){
-    await this.clientRepository.insertClient(dto,appointmentId);
+    return this.clientRepository.insertClient(dto,appointmentId);
   }
 
   async disableAppointment(appointmentId: number) {
