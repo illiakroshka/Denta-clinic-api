@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppService } from './app.service';
-import { DatabaseModule } from "./database/database.module";
+import { AppService } from '../app.service';
+import { DatabaseModule } from "../database/database.module";
 import { clientStub } from "./stubs/client.stub";
-import {appointments, doctors, PrismaClient} from "@prisma/client";
-import { NotFoundException} from "@nestjs/common";
+import { appointments, doctors, PrismaClient } from "@prisma/client";
+import { NotFoundException } from "@nestjs/common";
 
 describe('AppService', () => {
   let appService: AppService;

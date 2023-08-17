@@ -10,7 +10,7 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import {CreateClientDTO} from "./dtos/CreateClientDTO";
+import { CreateClientDTO } from "./dtos/CreateClientDTO";
 
 @Controller()
 export class AppController {
@@ -69,5 +69,7 @@ export class AppController {
     }
     await this.appService.disableAppointment(appointmentId);
     await this.appService.insertClient(dto, appointmentId);
+
+    return { message: 'Appointment successfully booked' };
   }
 }

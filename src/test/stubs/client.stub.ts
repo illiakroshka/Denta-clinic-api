@@ -1,4 +1,4 @@
-import { CreateClientDTO } from "../dtos/CreateClientDTO";
+import { CreateClientDTO } from "../../dtos/CreateClientDTO";
 
 export const clientStub = (): CreateClientDTO => {
   return {

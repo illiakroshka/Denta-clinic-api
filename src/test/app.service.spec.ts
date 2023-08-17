@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppService } from './app.service';
-import {DatabaseModule} from "./database/database.module";
+import { AppService } from '../app.service';
+import { DatabaseModule } from "../database/database.module";
 import { NotFoundException } from '@nestjs/common';
 import { doctorStub } from "./stubs/doctor.stub";
 import { appointmentStub } from "./stubs/appointment.stub";
