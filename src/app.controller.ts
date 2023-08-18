@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateClientDTO } from "./dtos/CreateClientDTO";
+import {NoopGraphInspector} from "@nestjs/core/inspector/noop-graph-inspector";
 
 @Controller()
 export class AppController {
@@ -71,5 +72,14 @@ export class AppController {
     await this.appService.insertClient(dto, appointmentId);
 
     return { message: 'Appointment successfully booked' };
+  }
+
+  @Get('doctors/:id/reviews')
+  async getDoctorReviews(@Param('id', ParseIntPipe) doctorId: number){
+    const review = await this.appService.getDoctorReviews(doctorId);
+    if (!review){
+      throw new NotFoundException(`Doctor has no reviews yet.`)
+    }
+    return review;
   }
 }

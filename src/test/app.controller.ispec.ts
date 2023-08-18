@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from "../app.module";
 import { AppService } from "../app.service"
 import * as request from 'supertest';
-import { appointments, doctors, PrismaClient } from "@prisma/client";
+import { appointments, doctors, PrismaClient, reviews } from "@prisma/client";
 import { doctorStub } from "./stubs/doctor.stub";
 import { clientStub } from "./stubs/client.stub";
 
@@ -12,6 +12,7 @@ describe('AppController', () => {
   let doctor: doctors;
   let httpServer: any;
   let appointment: appointments;
+  let review: reviews;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule(({
@@ -30,10 +31,18 @@ describe('AppController', () => {
     })
     appointment = await prisma.appointments.create({
       data:{
-        appointment_id: 0,
+        appointment_id: -1,
         doctor_id: doctor.doctor_id,
         appointment_datetime: new Date(),
         is_available: true,
+      }
+    })
+    review = await prisma.reviews.create({
+      data: {
+        review_id: -1,
+        doctor_id: doctor.doctor_id,
+        rating: 5,
+        comment: 'comment',
       }
     })
   })
@@ -50,6 +59,12 @@ describe('AppController', () => {
         doctor_id: doctor.doctor_id,
       },
     });
+
+    await prisma.reviews.deleteMany({
+      where: {
+        doctor_id: doctor.doctor_id,
+      },
+    })
 
     await prisma.doctors.delete({
       where:{
@@ -80,6 +95,16 @@ describe('AppController', () => {
 
       expect(response.body.message).toBe('Appointment successfully booked');
       expect(appService.disableAppointment).toHaveBeenCalledWith(appointmentId);
+    })
+  })
+
+  describe('getDoctorReview', () => {
+    it('should return the doctor review', async () => {
+      const doctorId = doctor.doctor_id;
+      const response = await request(httpServer)
+        .get(`/doctors/${doctorId}/reviews`)
+        .expect(200)
+      expect(response).toBeDefined()
     })
   })
 })

@@ -2,7 +2,7 @@ import { doctors } from "@prisma/client";
 
 export const doctorStub = (): doctors => {
   return {
-    "doctor_id": 0,
+    "doctor_id": -1,
     "first_name": "doctorFirsName",
     "last_name": "doctorLastName",
     "speciality": "speciality",
