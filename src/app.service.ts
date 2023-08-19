@@ -44,4 +44,8 @@ export class AppService {
   async getDoctorReviews(doctorId: number) {
     return this.reviewsRepository.getDoctorReviews(doctorId);
   }
+
+  async insertDoctorReviews(dto: object, doctorId:number) {
+    return this.reviewsRepository.insertDoctorReviews(dto, doctorId);
+  }
 }

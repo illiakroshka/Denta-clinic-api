@@ -14,4 +14,14 @@ export class ReviewsRepository {
      }
    })
   }
+
+  async insertDoctorReviews(dto, doctorId: number) {
+    return this.prisma.reviews.create({
+      data: {
+        doctor_id: doctorId,
+        rating: dto.rating,
+        comment: dto.comment,
+      }
+    })
+  }
 }

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateClientDTO } from "./dtos/CreateClientDTO";
-import {NoopGraphInspector} from "@nestjs/core/inspector/noop-graph-inspector";
+import {CreateReviewsDto} from "./dtos/ReviewsDTO";
 
 @Controller()
 export class AppController {
@@ -81,5 +81,20 @@ export class AppController {
       throw new NotFoundException(`Doctor has no reviews yet.`)
     }
     return review;
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post('doctors/:id/reviews')
+  async insertDoctorReviews(
+    @Param('id', ParseIntPipe) doctorId: number,
+    @Body() dto: CreateReviewsDto
+  ){
+    const doctor = await this.appService.getDoctorById(doctorId);
+    if (!doctor) {
+      throw new NotFoundException(`Doctor is not found`);
+    }
+    await this.appService.insertDoctorReviews(dto, doctorId);
+
+    return { message: 'Review is successfully added' };
   }
 }

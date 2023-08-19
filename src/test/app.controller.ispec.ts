@@ -5,6 +5,7 @@ import * as request from 'supertest';
 import { appointments, doctors, PrismaClient, reviews } from "@prisma/client";
 import { doctorStub } from "./stubs/doctor.stub";
 import { clientStub } from "./stubs/client.stub";
+import {reviewStub} from "./stubs/review.stub";
 
 describe('AppController', () => {
   let appService: AppService;
@@ -71,6 +72,12 @@ describe('AppController', () => {
         doctor_id: doctor.doctor_id,
       }
     })
+
+    await prisma.reviews.deleteMany({
+      where:{
+        doctor_id: doctor.doctor_id,
+      }
+    })
   })
 
   describe('getDoctors', () => {
@@ -105,6 +112,19 @@ describe('AppController', () => {
         .get(`/doctors/${doctorId}/reviews`)
         .expect(200)
       expect(response).toBeDefined()
+    })
+  })
+
+  describe('insertDoctorReviews', () => {
+    it('should insert the review to database',async () => {
+      const doctorId = doctor.doctor_id;
+      const reviewDto = reviewStub();
+      const response = await request(httpServer)
+        .post(`/doctors/${doctorId}/reviews`)
+        .send(reviewDto)
+        .expect(201)
+
+      expect(response.body.message).toBe('Review is successfully added');
     })
   })
 })
