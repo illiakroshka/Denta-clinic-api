@@ -24,4 +24,15 @@ export class ReviewsRepository {
       }
     })
   }
+
+  async calculateAverageRating(doctorId: number){
+    const reviews = await this.prisma.reviews.findMany({
+      where: { doctor_id: doctorId },
+    });
+
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / reviews.length;
+
+    return averageRating;
+  }
 }

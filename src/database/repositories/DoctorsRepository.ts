@@ -18,4 +18,11 @@ export class DoctorsRepository {
       }
     })
   }
+
+  async updateDoctorRating(doctorId: number, rating: number) {
+    await this.prisma.doctors.update({
+      where: {doctor_id: doctorId },
+      data: {average_rating: rating},
+    });
+  }
 }

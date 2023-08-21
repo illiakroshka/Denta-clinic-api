@@ -10,6 +10,7 @@ export const doctorStub = (): doctors => {
     "specialization": "specialization",
     "degree": "degree",
     "about": "about",
+    "average_rating": 4.5,
     "profile_picture": null
   };
 };

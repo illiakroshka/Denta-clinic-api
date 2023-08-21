@@ -119,12 +119,16 @@ describe('AppController', () => {
     it('should insert the review to database',async () => {
       const doctorId = doctor.doctor_id;
       const reviewDto = reviewStub();
+      const calculateAverageRatingSpy = jest.spyOn(appService, 'calculateAverageRating').mockResolvedValue(4.5);
+      const updateDoctorRatingSpy = jest.spyOn(appService, 'updateDoctorRating').mockResolvedValue();
       const response = await request(httpServer)
         .post(`/doctors/${doctorId}/reviews`)
         .send(reviewDto)
         .expect(201)
 
       expect(response.body.message).toBe('Review is successfully added');
+      expect(calculateAverageRatingSpy).toHaveBeenCalledWith(doctorId);
+      expect(updateDoctorRatingSpy).toHaveBeenCalledWith(doctorId, 4.5);
     })
   })
 })

@@ -48,4 +48,12 @@ export class AppService {
   async insertDoctorReviews(dto: object, doctorId:number) {
     return this.reviewsRepository.insertDoctorReviews(dto, doctorId);
   }
+
+  async calculateAverageRating(doctorId:number) {
+    return this.reviewsRepository.calculateAverageRating(doctorId);
+  }
+
+  async updateDoctorRating(doctorId: number, rating: number) {
+    await this.doctorsRepository.updateDoctorRating(doctorId,rating);
+  }
 }

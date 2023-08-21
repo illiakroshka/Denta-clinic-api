@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateClientDTO } from "./dtos/CreateClientDTO";
-import {CreateReviewsDto} from "./dtos/ReviewsDTO";
+import { CreateReviewsDto } from "./dtos/ReviewsDTO";
 
 @Controller()
 export class AppController {
@@ -94,6 +94,8 @@ export class AppController {
       throw new NotFoundException(`Doctor is not found`);
     }
     await this.appService.insertDoctorReviews(dto, doctorId);
+    const averageRating = await this.appService.calculateAverageRating(doctorId);
+    await this.appService.updateDoctorRating(doctorId, averageRating);
 
     return { message: 'Review is successfully added' };
   }
