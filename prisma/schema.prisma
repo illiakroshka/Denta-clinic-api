@@ -16,6 +16,7 @@ model doctors {
   specialization  String?        @db.VarChar(200)
   degree          String?        @db.VarChar(100)
   about           String?
+  average_rating  Float?
   profile_picture String?        @db.VarChar(255)
   appointments    appointments[]
   reviews         reviews[]
