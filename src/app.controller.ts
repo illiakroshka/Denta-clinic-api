@@ -12,7 +12,9 @@ import {
 import { AppService } from './app.service';
 import { CreateClientDTO } from "./dtos/CreateClientDTO";
 import { CreateReviewsDto } from "./dtos/ReviewsDTO";
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('doctors')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
