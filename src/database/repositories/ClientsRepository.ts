@@ -21,6 +21,7 @@ export class ClientsRepository {
         first_name: dto.first_name,
         last_name: dto.last_name,
         phone_number: dto.phone_number,
+        password: dto.password,
         appointment: {
           connect: {
             appointment_id: appointmentId,

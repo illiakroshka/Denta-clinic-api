@@ -36,6 +36,7 @@ model clients {
   first_name     String
   last_name      String
   phone_number   String
+  password       String
   appointment_id Int?
   appointment    appointments? @relation(fields: [appointment_id], references: [appointment_id], onDelete: NoAction, onUpdate: NoAction)
 }

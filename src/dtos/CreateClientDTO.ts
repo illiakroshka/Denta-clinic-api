@@ -1,4 +1,4 @@
-import {IsNumber, IsString} from "class-validator";
+import { IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateClientDTO {
@@ -14,4 +14,8 @@ export class CreateClientDTO {
   @ApiProperty()
   @IsString()
   phone_number: string;
+
+  @ApiProperty()
+  @IsString()
+  password: string
 }
