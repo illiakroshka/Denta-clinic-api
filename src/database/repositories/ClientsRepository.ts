@@ -7,7 +7,7 @@ export class ClientsRepository {
     private prisma: DatabaseService,
   ) {}
 
-  async insertClient(dto, appointmentId){
+  async bookAppointment(clientId: number, appointmentId: number) {
     const appointment = await this.prisma.appointments.findUnique({
       where: {
         appointment_id: appointmentId
@@ -16,18 +16,36 @@ export class ClientsRepository {
     if (!appointment) {
       throw new NotFoundException('Information about appointment is not found');
     }
-    return this.prisma.clients.create({
+    return this.prisma.clients.update({
       data: {
+        appointment_id: appointmentId,
+      },
+      where:{
+        client_id: clientId,
+      }
+    })
+  }
+
+  async createClient(dto){
+    return this.prisma.clients.create({
+      data:{
         first_name: dto.first_name,
         last_name: dto.last_name,
         phone_number: dto.phone_number,
         password: dto.password,
-        appointment: {
-          connect: {
-            appointment_id: appointmentId,
-          }
-        }
       }
-    });
+    })
+  }
+
+  async checkClient (phoneNumber: string) {
+    return this.prisma.clients.findFirst({
+      where: { phone_number: phoneNumber }
+    })
+  }
+
+  async checkAppointments (clientId: number) {
+    return this.prisma.clients.findFirst({
+      where: { client_id: clientId },
+    })
   }
 }

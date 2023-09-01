@@ -44,4 +44,10 @@ export class AppointmentRepository {
       }
     })
   }
+
+  async getAppointment(appointmentId: number) {
+    return this.prisma.appointments.findUnique({
+      where:{ appointment_id: appointmentId }
+    })
+  }
 }

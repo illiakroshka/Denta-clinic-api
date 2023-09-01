@@ -5,14 +5,14 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
-  Post,
+  Post, Request, UseGuards,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateClientDTO } from "./dtos/CreateClientDTO";
-import { CreateReviewsDto } from "./dtos/ReviewsDTO";
-import {ApiTags} from "@nestjs/swagger";
+import { CreateReviewsDto } from './dtos/ReviewsDTO';
+import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from './security/auth.guard';
 
 @ApiTags('doctors')
 @Controller()
@@ -59,20 +59,20 @@ export class AppController {
     return this.appService.getAppointments();
   }
 
+  @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @Post('doctors/:id/appointments/:appointmentId')
   async bookAppointment(
     @Param('appointmentId', ParseIntPipe) appointmentId: number,
     @Param('id', ParseIntPipe) doctorId: number,
-    @Body() dto: CreateClientDTO
+    @Request() req,
   ) {
     const appointment = await this.appService.getAppointmentById(doctorId, appointmentId);
     if (!appointment) {
       throw new NotFoundException(`Information about appointment is not found`);
     }
     await this.appService.disableAppointment(appointmentId);
-    await this.appService.insertClient(dto, appointmentId);
-
+    await this.appService.bookAppointment(req.user.sub, appointmentId);
     return { message: 'Appointment successfully booked' };
   }
 
@@ -85,6 +85,7 @@ export class AppController {
     return review;
   }
 
+  @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @Post('doctors/:id/reviews')
   async insertDoctorReviews(

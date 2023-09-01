@@ -33,8 +33,8 @@ export class AppService {
     return this.appointmentRepository.getAppointmentById(doctorId, appointmentId);
   }
 
-  async insertClient(dto: object, appointmentId: number){
-    return this.clientRepository.insertClient(dto,appointmentId);
+  async bookAppointment(clientId: number, appointmentId: number) {
+    return this.clientRepository.bookAppointment(clientId, appointmentId);
   }
 
   async disableAppointment(appointmentId: number) {
