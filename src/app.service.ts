@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DoctorsRepository } from './database/repositories/DoctorsRepository';
 import { AppointmentRepository } from './database/repositories/AppointmentRepository';
 import { ClientsRepository } from "./database/repositories/ClientsRepository";
@@ -45,8 +45,8 @@ export class AppService {
     return this.reviewsRepository.getDoctorReviews(doctorId);
   }
 
-  async insertDoctorReviews(dto: object, doctorId:number) {
-    return this.reviewsRepository.insertDoctorReviews(dto, doctorId);
+  async insertDoctorReviews(dto: object, doctorId:number, clientId: number) {
+    return this.reviewsRepository.insertDoctorReviews(dto, doctorId, clientId);
   }
 
   async calculateAverageRating(doctorId:number) {
@@ -55,5 +55,13 @@ export class AppService {
 
   async updateDoctorRating(doctorId: number, rating: number) {
     await this.doctorsRepository.updateDoctorRating(doctorId,rating);
+  }
+
+  async deleteReview(clientId: number, reviewId: number) {
+    const review = await this.reviewsRepository.findReview(clientId);
+    if (!review.length) {
+      throw new NotFoundException('Ви не можете видалити відкук який ви не створювали')
+    }
+    return this.reviewsRepository.deleteReview(reviewId);
   }
 }

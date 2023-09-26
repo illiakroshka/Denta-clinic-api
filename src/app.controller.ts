@@ -7,17 +7,22 @@ import {
   ParseIntPipe,
   Post, Request, UseGuards,
   UsePipes,
-  ValidationPipe
+  ValidationPipe,
+  Delete
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateReviewsDto } from './dtos/ReviewsDTO';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from './security/auth.guard';
+import { ReviewsMapper } from './mappers/ReviewsMapper';
 
 @ApiTags('doctors')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor (
+    private appService: AppService,
+    private reviewMapper: ReviewsMapper,
+  ) {}
 
   @Get('doctors')
   getDoctors(): object {
@@ -79,10 +84,10 @@ export class AppController {
   @Get('doctors/:id/reviews')
   async getDoctorReviews(@Param('id', ParseIntPipe) doctorId: number){
     const review = await this.appService.getDoctorReviews(doctorId);
-    if (!review){
+    if (!review.length){
       throw new NotFoundException(`Doctor has no reviews yet.`)
     }
-    return review;
+    return this.reviewMapper.getDoctorReviews(review);
   }
 
   @UseGuards(AuthGuard)
@@ -90,16 +95,33 @@ export class AppController {
   @Post('doctors/:id/reviews')
   async insertDoctorReviews(
     @Param('id', ParseIntPipe) doctorId: number,
-    @Body() dto: CreateReviewsDto
+    @Body() dto: CreateReviewsDto,
+    @Request() req: any,
   ){
     const doctor = await this.appService.getDoctorById(doctorId);
     if (!doctor) {
       throw new NotFoundException(`Doctor is not found`);
     }
-    await this.appService.insertDoctorReviews(dto, doctorId);
+    await this.appService.insertDoctorReviews(dto, doctorId, req.user.sub);
     const averageRating = await this.appService.calculateAverageRating(doctorId);
     await this.appService.updateDoctorRating(doctorId, averageRating);
 
     return { message: 'Review is successfully added' };
+  }
+
+  @UseGuards(AuthGuard)
+  @UsePipes(new ValidationPipe())
+  @Delete('doctors/:id/reviews/:reviewId')
+  async deleteReview (
+    @Param('id', ParseIntPipe) doctorId: number,
+    @Param('reviewId', ParseIntPipe) reviewId: number,
+    @Request() req: any,
+  ) {
+    const doctor = await this.appService.getDoctorById(doctorId);
+    if (!doctor) {
+      throw new NotFoundException(`Doctor is not found`);
+    }
+    console.log(reviewId)
+    return this.appService.deleteReview(req.user.sub, reviewId);
   }
 }
