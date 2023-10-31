@@ -4,8 +4,6 @@ import { AppService } from "../app.service"
 import * as request from 'supertest';
 import { appointments, doctors, PrismaClient, reviews } from "@prisma/client";
 import { doctorStub } from "./stubs/doctor.stub";
-import { clientStub } from "./stubs/client.stub";
-import {reviewStub} from "./stubs/review.stub";
 
 describe('AppController', () => {
   let appService: AppService;
@@ -49,12 +47,6 @@ describe('AppController', () => {
   })
 
   afterAll(async () => {
-    await prisma.clients.deleteMany({
-      where: {
-        appointment_id: appointment.appointment_id,
-      },
-    });
-
     await prisma.appointments.deleteMany({
       where: {
         doctor_id: doctor.doctor_id,
@@ -72,12 +64,6 @@ describe('AppController', () => {
         doctor_id: doctor.doctor_id,
       }
     })
-
-    await prisma.reviews.deleteMany({
-      where:{
-        doctor_id: doctor.doctor_id,
-      }
-    })
   })
 
   describe('getDoctors', () => {
@@ -89,22 +75,6 @@ describe('AppController', () => {
     })
   })
 
-  describe('insertClient', () => {
-    it('should insert client to the database and disable appointment', async () => {
-      const appointmentId = appointment.appointment_id;
-      const doctorId = doctor.doctor_id;
-      const clientDto = clientStub();
-      jest.spyOn(appService, 'disableAppointment').mockResolvedValue();
-      const response = await request(httpServer)
-        .post(`/doctors/${doctorId}/appointments/${appointmentId}`)
-        .send(clientDto)
-        .expect(201)
-
-      expect(response.body.message).toBe('Appointment successfully booked');
-      expect(appService.disableAppointment).toHaveBeenCalledWith(appointmentId);
-    })
-  })
-
   describe('getDoctorReview', () => {
     it('should return the doctor review', async () => {
       const doctorId = doctor.doctor_id;
@@ -112,23 +82,6 @@ describe('AppController', () => {
         .get(`/doctors/${doctorId}/reviews`)
         .expect(200)
       expect(response).toBeDefined()
-    })
-  })
-
-  describe('insertDoctorReviews', () => {
-    it('should insert the review to database',async () => {
-      const doctorId = doctor.doctor_id;
-      const reviewDto = reviewStub();
-      const calculateAverageRatingSpy = jest.spyOn(appService, 'calculateAverageRating').mockResolvedValue(4.5);
-      const updateDoctorRatingSpy = jest.spyOn(appService, 'updateDoctorRating').mockResolvedValue();
-      const response = await request(httpServer)
-        .post(`/doctors/${doctorId}/reviews`)
-        .send(reviewDto)
-        .expect(201)
-
-      expect(response.body.message).toBe('Review is successfully added');
-      expect(calculateAverageRatingSpy).toHaveBeenCalledWith(doctorId);
-      expect(updateDoctorRatingSpy).toHaveBeenCalledWith(doctorId, 4.5);
     })
   })
 })

@@ -36,15 +36,19 @@ model clients {
   first_name     String
   last_name      String
   phone_number   String
+  password       String
   appointment_id Int?
   appointment    appointments? @relation(fields: [appointment_id], references: [appointment_id], onDelete: NoAction, onUpdate: NoAction)
+  reviews        reviews[]
 }
 
 model reviews {
   review_id  Int    @id @default(autoincrement())
   doctor_id  Int?
+  client_id  Int?
   rating     Int
   comment    String
   created_at DateTime  @default(now())
-  doctors              doctors?  @relation(fields: [doctor_id], references: [doctor_id], onDelete: NoAction, onUpdate: NoAction)
+  doctors    doctors?  @relation(fields: [doctor_id], references: [doctor_id], onDelete: NoAction, onUpdate: NoAction)
+  clients    clients?  @relation(fields: [client_id],references: [client_id], onDelete: NoAction, onUpdate: NoAction)
 }
