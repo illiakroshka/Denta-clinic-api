@@ -1,8 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DoctorsRepository } from './database/repositories/DoctorsRepository';
 import { AppointmentRepository } from './database/repositories/AppointmentRepository';
-import { ClientsRepository } from "./database/repositories/ClientsRepository";
-import { ReviewsRepository } from "./database/repositories/ReviewsRepository";
+import { ClientsRepository } from './database/repositories/ClientsRepository';
 
 @Injectable()
 export class AppService {
@@ -10,7 +9,6 @@ export class AppService {
     private doctorsRepository: DoctorsRepository,
     private appointmentRepository: AppointmentRepository,
     private clientRepository: ClientsRepository,
-    private reviewsRepository: ReviewsRepository,
   ) {}
 
   async getDoctors() {
@@ -41,27 +39,7 @@ export class AppService {
     await this.appointmentRepository.disableAppointment(appointmentId);
   }
 
-  async getDoctorReviews(doctorId: number) {
-    return this.reviewsRepository.getDoctorReviews(doctorId);
-  }
-
-  async insertDoctorReviews(dto: object, doctorId:number, clientId: number) {
-    return this.reviewsRepository.insertDoctorReviews(dto, doctorId, clientId);
-  }
-
-  async calculateAverageRating(doctorId:number) {
-    return this.reviewsRepository.calculateAverageRating(doctorId);
-  }
-
   async updateDoctorRating(doctorId: number, rating: number) {
     await this.doctorsRepository.updateDoctorRating(doctorId,rating);
-  }
-
-  async deleteReview(clientId: number, reviewId: number) {
-    const review = await this.reviewsRepository.findReview(clientId);
-    if (!review.length) {
-      throw new NotFoundException('Ви не можете видалити відкук який ви не створювали')
-    }
-    return this.reviewsRepository.deleteReview(reviewId);
   }
 }
