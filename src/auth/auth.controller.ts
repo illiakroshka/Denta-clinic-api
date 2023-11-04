@@ -28,10 +28,4 @@ export class AuthController {
   async login (@Body() body: LoginDTO) {
     return this.authService.login(body.phone_number,body.password);
   }
-
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  async getProfile(@Request() req) {
-    return this.authService.checkAppointment(req.user.sub);
-  }
 }

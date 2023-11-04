@@ -7,8 +7,6 @@ import { ClientsRepository } from './database/repositories/ClientsRepository';
 export class AppService {
   constructor(
     private doctorsRepository: DoctorsRepository,
-    private appointmentRepository: AppointmentRepository,
-    private clientRepository: ClientsRepository,
   ) {}
 
   async getDoctors() {
@@ -17,26 +15,6 @@ export class AppService {
 
   async getDoctorById(doctorId: number) {
     return this.doctorsRepository.getDoctorById(doctorId);
-  }
-
-  async getAppointments(){
-    return this.appointmentRepository.getAppointments();
-  }
-
-  async getDoctorAppointments(doctorId: number) {
-    return this.appointmentRepository.getDoctorAppointments(doctorId);
-  }
-
-  async getAppointmentById(doctorId: number, appointmentId: number) {
-    return this.appointmentRepository.getAppointmentById(doctorId, appointmentId);
-  }
-
-  async bookAppointment(clientId: number, appointmentId: number) {
-    return this.clientRepository.bookAppointment(clientId, appointmentId);
-  }
-
-  async disableAppointment(appointmentId: number) {
-    await this.appointmentRepository.disableAppointment(appointmentId);
   }
 
   async updateDoctorRating(doctorId: number, rating: number) {

@@ -1,30 +1,12 @@
-import { Injectable , NotFoundException } from '@nestjs/common';
+import { Injectable  } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class ClientsRepository {
   constructor (
     private prisma: DatabaseService,
   ) {}
-
-  async bookAppointment(clientId: number, appointmentId: number) {
-    const appointment = await this.prisma.appointments.findUnique({
-      where: {
-        appointment_id: appointmentId
-      }
-    });
-    if (!appointment) {
-      throw new NotFoundException('Information about appointment is not found');
-    }
-    return this.prisma.clients.update({
-      data: {
-        appointment_id: appointmentId,
-      },
-      where:{
-        client_id: clientId,
-      }
-    })
-  }
 
   async createClient(dto){
     return this.prisma.clients.create({
@@ -43,9 +25,15 @@ export class ClientsRepository {
     })
   }
 
-  async checkAppointments (clientId: number) {
-    return this.prisma.clients.findFirst({
-      where: { client_id: clientId },
+  async findMany (data: Prisma.clientsFindManyArgs) {
+    return this.prisma.clients.findMany({
+      ...data,
+    })
+  }
+
+  async update(args: Prisma.clientsUpdateArgs) {
+    return this.prisma.clients.update({
+      ...args,
     })
   }
 }

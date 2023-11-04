@@ -1,15 +1,13 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientsRepository } from '../database/repositories/ClientsRepository';
 import { CreateClientDTO } from '../dtos/CreateClientDTO';
 import { AlreadyRegisteredException } from '../utils/exceptions/AlreadyRegisteredException';
 import { JwtService } from '@nestjs/jwt';
-import { AppointmentRepository } from '../database/repositories/AppointmentRepository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private clientRepository: ClientsRepository,
-    private appointmentRepository: AppointmentRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -29,13 +27,5 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     }
-  }
-
-  async checkAppointment(clientId: number) {
-    const { appointment_id } = await this.clientRepository.checkAppointments(clientId);
-    if (!appointment_id) {
-      throw new NotFoundException(`You don't have appointments yet`)
-    }
-    return this.appointmentRepository.getAppointment(appointment_id);
   }
 }
