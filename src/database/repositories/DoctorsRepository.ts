@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DoctorsRepository {
@@ -7,22 +8,38 @@ export class DoctorsRepository {
     private prisma: DatabaseService,
   ) {}
 
-  async getDoctors() {
-    return this.prisma.doctors.findMany();
+  include = {
+    appointments: true,
   }
 
-  async getDoctorById(doctorId: number) {
-    return this.prisma.doctors.findUnique({
-      where:{
-        doctor_id: doctorId
+  async update(args: Prisma.doctorsUpdateArgs) {
+    return this.prisma.doctors.update({
+      ...args,
+    })
+  }
+
+  async updateById (id: number, data: Prisma.doctorsUncheckedUpdateInput) {
+    return this.prisma.doctors.update({
+      where: {
+        doctor_id: id,
+      },
+      data,
+    })
+  }
+
+  async findById(id: number) {
+    return this.prisma.doctors.findFirst({
+      include: this.include,
+      where: {
+        doctor_id: id,
       }
     })
   }
 
-  async updateDoctorRating(doctorId: number, rating: number) {
-    await this.prisma.doctors.update({
-      where: {doctor_id: doctorId },
-      data: {average_rating: rating},
-    });
+  async findMany(args: Prisma.doctorsFindManyArgs) {
+    return this.prisma.doctors.findMany({
+      include: this.include,
+      ...args,
+    })
   }
 }

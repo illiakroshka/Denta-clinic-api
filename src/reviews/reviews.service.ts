@@ -1,10 +1,12 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReviewsRepository } from '../database/repositories/ReviewsRepository';
+import { DoctorsService } from '../doctors/doctors.service';
 
 @Injectable()
 export class ReviewsService {
   constructor(
     private reviewsRepository: ReviewsRepository,
+    private doctorsService: DoctorsService,
   ) {}
 
   async getDoctorsReviews(doctorId: number) {
@@ -16,7 +18,7 @@ export class ReviewsService {
     return doctorReviews;
   }
 
-  async deleteReview (clientId: number, reviewId: number) {
+  async deleteReview (clientId: number, reviewId: number, doctorId: number) {
     const review = await this.reviewsRepository.findMany({
       where: {
         client_id: clientId,
@@ -26,17 +28,21 @@ export class ReviewsService {
     if (!review.length){
       throw new NotFoundException('Ви не можете видалити відкук який ви не створювали')
     }
-    return this.reviewsRepository.deleteById(reviewId);
+    const deletedReview = this.reviewsRepository.deleteById(reviewId);
+    await this.updateAverageRating(doctorId);
+    return deletedReview;
   }
 
-  async createReview (dto ,doctorId:number, clientId: number) {
+  async createReview (dto ,doctorId: number, clientId: number) {
     const data = {
       doctor_id: doctorId,
       client_id: clientId,
       rating: dto.rating,
       comment: dto.comment,
     }
-    return this.reviewsRepository.create(data);
+    const review = await this.reviewsRepository.create(data);
+    await this.updateAverageRating(doctorId);
+    return review;
   }
 
   async calculateAverageRating (doctorId: number) {
@@ -50,5 +56,10 @@ export class ReviewsService {
     const averageRating = totalRating / reviews.length;
 
     return averageRating;
+  }
+
+  async updateAverageRating (doctorId: number) {
+    const averageRating = await this.calculateAverageRating(doctorId);
+    await this.doctorsService.updateDoctorRating(doctorId, averageRating);
   }
 }

@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -11,17 +10,17 @@ import {
   UseGuards, UsePipes, ValidationPipe
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
-import { AppService } from "../app.service";
-import { AuthGuard } from "../security/auth.guard";
-import { ReviewsMapper } from "../mappers/ReviewsMapper";
-import {CreateReviewsDto} from "../dtos/ReviewsDTO";
+import { AuthGuard } from '../security/auth.guard';
+import { ReviewsMapper } from '../mappers/ReviewsMapper';
+import { CreateReviewsDto } from '../dtos/ReviewsDTO';
+import { DoctorsService } from '../doctors/doctors.service';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(
     private reviewsService: ReviewsService,
-    private appService: AppService,
     private reviewMapper: ReviewsMapper,
+    private doctorsService: DoctorsService,
   ) {}
 
   @Get('/:doctorId')
@@ -36,12 +35,9 @@ export class ReviewsController {
     @Param('doctorId', ParseIntPipe) doctorId: number,
     @Param('reviewId', ParseIntPipe) reviewId: number,
     @Request() req: any,
-  ){
-    const doctor = await this.appService.getDoctorById(doctorId);
-    if (!doctor) {
-      throw new NotFoundException(`Doctor is not found`);
-    }
-    return this.reviewsService.deleteReview(req.user.sub, reviewId);
+  ) {
+    await this.doctorsService.getDoctor(doctorId);
+    return this.reviewsService.deleteReview(req.user.sub, reviewId, doctorId);
   }
 
   @UseGuards(AuthGuard)
@@ -51,14 +47,9 @@ export class ReviewsController {
     @Param('doctorId', ParseIntPipe) doctorId: number,
     @Body() dto: CreateReviewsDto,
     @Request() req: any,
-  ){
-    const doctor = await this.appService.getDoctorById(doctorId);
-    if (!doctor) {
-      throw new NotFoundException(`Doctor is not found`);
-    }
-    const review = await this.reviewsService.createReview(dto,doctorId,req.user.sub);
-    const averageRating = await this.reviewsService.calculateAverageRating(doctorId);
-    await this.appService.updateDoctorRating(doctorId, averageRating);
+  ) {
+    await this.doctorsService.getDoctor(doctorId);
+    const review = await this.reviewsService.createReview(dto, doctorId, req.user.sub);
     return review;
   }
 }
