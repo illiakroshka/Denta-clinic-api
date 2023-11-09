@@ -4,25 +4,25 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AppointmentRepository {
-  constructor(
+  constructor (
     private prisma: DatabaseService,
   ) {}
 
-  async findMany(data: Prisma.appointmentsFindManyArgs) {
+  async findMany (data: Prisma.appointmentsFindManyArgs) {
     return this.prisma.appointments.findMany({
       ...data,
-    })
+    });
   }
 
-  async findUnique(data: Prisma.appointmentsFindUniqueOrThrowArgs) {
+  async findUnique (data: Prisma.appointmentsFindUniqueOrThrowArgs) {
     return this.prisma.appointments.findUnique({
       ...data,
-    })
+    });
   }
 
   async update (args: Prisma.appointmentsUpdateArgs) {
     return this.prisma.appointments.update({
       ...args,
-    })
+    });
   }
 }

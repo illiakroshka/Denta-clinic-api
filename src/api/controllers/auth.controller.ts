@@ -11,17 +11,17 @@ import { LoginDTO } from '../dtos/LoginDTO';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor (private readonly authService: AuthService) {}
 
   @UsePipes(new ValidationPipe())
   @Post('/register')
-  async register(@Body() body: CreateClientDTO){
-    return this.authService.createClient(body)
+  async register (@Body() body: CreateClientDTO) {
+    return this.authService.createClient(body);
   }
 
   @UsePipes(new ValidationPipe())
   @Post('/login')
   async login (@Body() body: LoginDTO) {
-    return this.authService.login(body.phone_number,body.password);
+    return this.authService.login(body.phone_number, body.password);
   }
 }

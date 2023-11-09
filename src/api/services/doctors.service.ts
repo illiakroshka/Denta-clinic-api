@@ -3,15 +3,15 @@ import { DoctorsRepository } from '../../database/repositories/DoctorsRepository
 
 @Injectable()
 export class DoctorsService {
-  constructor(
+  constructor (
    private doctorRepository: DoctorsRepository,
   ) {}
 
-  async getDoctors() {
+  async getDoctors () {
     return this.doctorRepository.findMany({});
   }
 
-  async getDoctor(doctorId: number) {
+  async getDoctor (doctorId: number) {
     const doctor = await this.doctorRepository.findById(doctorId);
     if (!doctor) {
       throw new NotFoundException('Doctor with such id is not found');
@@ -19,9 +19,9 @@ export class DoctorsService {
     return doctor;
   }
 
-  async updateDoctorRating(doctorId: number, rating: number) {
+  async updateDoctorRating (doctorId: number, rating: number) {
     await this.doctorRepository.updateById(doctorId, {
       average_rating: rating,
-    })
+    });
   }
 }

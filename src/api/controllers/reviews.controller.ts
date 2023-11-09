@@ -7,7 +7,9 @@ import {
   ParseIntPipe,
   Post,
   Request,
-  UseGuards, UsePipes, ValidationPipe
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ReviewsService } from '../services/reviews.service';
 import { AuthGuard } from '../../security/auth.guard';
@@ -17,14 +19,14 @@ import { DoctorsService } from '../services/doctors.service';
 
 @Controller('reviews')
 export class ReviewsController {
-  constructor(
+  constructor (
     private reviewsService: ReviewsService,
     private reviewMapper: ReviewsMapper,
     private doctorsService: DoctorsService,
   ) {}
 
   @Get('/:doctorId')
-  async getDoctorsReviews(@Param('doctorId', ParseIntPipe) doctorId: number) {
+  async getDoctorsReviews (@Param('doctorId', ParseIntPipe) doctorId: number) {
     const doctorReviews = await this.reviewsService.getDoctorsReviews(doctorId);
     return this.reviewMapper.getDoctorReviews(doctorReviews);
   }
@@ -43,7 +45,7 @@ export class ReviewsController {
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @Post('/:doctorId')
-  async createReview(
+  async createReview (
     @Param('doctorId', ParseIntPipe) doctorId: number,
     @Body() dto: CreateReviewsDto,
     @Request() req: any,

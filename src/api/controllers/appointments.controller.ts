@@ -1,29 +1,29 @@
-import {Controller, Get, Param, ParseIntPipe, Post, Request, UseGuards} from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post, Request, UseGuards } from '@nestjs/common';
 import { AppointmentsService } from '../services/appointments.service';
 import { AuthGuard } from '../../security/auth.guard';
 
 @Controller('appointments')
 export class AppointmentsController {
-  constructor(
+  constructor (
     private appointmentsService: AppointmentsService,
   ) {}
 
   @Get()
-  async getActiveAppointments() {
-    const ActiveAppointments = await this.appointmentsService.getActiveAppointments()
+  async getActiveAppointments () {
+    const ActiveAppointments = await this.appointmentsService.getActiveAppointments();
     return ActiveAppointments;
   }
 
   @Get('/:appointmentId')
-  async getAppointment(
-   @Param('appointmentId',ParseIntPipe) appointmentId: number
+  async getAppointment (
+   @Param('appointmentId', ParseIntPipe) appointmentId: number
   ) {
-    const appointment = await this.appointmentsService.getAppointment(appointmentId)
+    const appointment = await this.appointmentsService.getAppointment(appointmentId);
     return appointment;
   }
 
   @Get('/doctors/:doctorId')
-  async getDoctorAppointments(
+  async getDoctorAppointments (
     @Param('doctorId', ParseIntPipe) doctorId: number
   ) {
     const DoctorAppointments = await this.appointmentsService.getDoctorsAppointments(doctorId);
@@ -32,7 +32,7 @@ export class AppointmentsController {
 
   @UseGuards(AuthGuard)
   @Post('/:appointmentId')
-  async bookAppointment(
+  async bookAppointment (
     @Param('appointmentId', ParseIntPipe) appointmentId: number,
     @Request() req,
   ) {

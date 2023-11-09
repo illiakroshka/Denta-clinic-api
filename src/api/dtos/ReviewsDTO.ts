@@ -6,9 +6,9 @@ export class CreateReviewsDto {
   @IsNumber()
   @Min(0, { message: 'Rating must be at least 0' })
   @Max(5, { message: 'Rating must be at most 5' })
-  rating: number;
+    rating: number;
 
   @ApiProperty()
   @IsString()
-  comment: string;
+    comment: string;
 }

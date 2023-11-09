@@ -4,17 +4,17 @@ import { DoctorsService } from './doctors.service';
 
 @Injectable()
 export class ReviewsService {
-  constructor(
+  constructor (
     private reviewsRepository: ReviewsRepository,
     private doctorsService: DoctorsService,
   ) {}
 
-  async getDoctorsReviews(doctorId: number) {
+  async getDoctorsReviews (doctorId: number) {
     const doctorReviews = await this.reviewsRepository.findMany({
       where: {
         doctor_id: doctorId,
-      }
-    })
+      },
+    });
     return doctorReviews;
   }
 
@@ -23,23 +23,23 @@ export class ReviewsService {
       where: {
         client_id: clientId,
         review_id: reviewId,
-      }
-    })
-    if (!review.length){
-      throw new NotFoundException('Ви не можете видалити відкук який ви не створювали')
+      },
+    });
+    if (!review.length) {
+      throw new NotFoundException('You can not delete review that you did not create');
     }
     const deletedReview = this.reviewsRepository.deleteById(reviewId);
     await this.updateAverageRating(doctorId);
     return deletedReview;
   }
 
-  async createReview (dto ,doctorId: number, clientId: number) {
+  async createReview (dto, doctorId: number, clientId: number) {
     const data = {
       doctor_id: doctorId,
       client_id: clientId,
       rating: dto.rating,
       comment: dto.comment,
-    }
+    };
     const review = await this.reviewsRepository.create(data);
     await this.updateAverageRating(doctorId);
     return review;
@@ -49,8 +49,8 @@ export class ReviewsService {
     const reviews = await this.reviewsRepository.findMany({
       where: {
         doctor_id: doctorId,
-      }
-    })
+      },
+    });
 
     const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
     const averageRating = totalRating / reviews.length;

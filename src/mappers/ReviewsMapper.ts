@@ -1,5 +1,5 @@
 import { DbReview } from '../database/entities/DbReview';
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ReviewsMapper {
@@ -9,7 +9,7 @@ export class ReviewsMapper {
       rating: review.rating,
       comment: review.comment,
       reviewId: review.review_id,
-    }
+    };
   }
 
   getDoctorReviews (reviews : DbReview[]) {

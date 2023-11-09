@@ -6,7 +6,7 @@ import { ReviewsMapper } from '../mappers/ReviewsMapper';
     ReviewsMapper,
   ],
   exports: [
-    ReviewsMapper
+    ReviewsMapper,
   ],
 })
-export class MapperModule{}
+export class MapperModule {}

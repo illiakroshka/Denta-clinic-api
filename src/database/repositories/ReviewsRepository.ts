@@ -4,27 +4,27 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ReviewsRepository {
-  constructor(
+  constructor (
     private prisma: DatabaseService
   ) {}
 
-  async findMany(data: Prisma.reviewsFindManyArgs) {
+  async findMany (data: Prisma.reviewsFindManyArgs) {
     return this.prisma.reviews.findMany({
       ...data,
-    })
+    });
   }
 
   async deleteById (id: number) {
     return this.prisma.reviews.delete({
       where: {
         review_id: id,
-      }
-    })
+      },
+    });
   }
 
   async create (data: Prisma.reviewsUncheckedCreateInput) {
     return this.prisma.reviews.create({
       data,
-    })
+    });
   }
 }

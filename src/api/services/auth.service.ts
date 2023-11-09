@@ -6,26 +6,26 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(
+  constructor (
     private clientRepository: ClientsRepository,
     private jwtService: JwtService,
   ) {}
 
-  async createClient(dto: CreateClientDTO) {
+  async createClient (dto: CreateClientDTO) {
     if (await this.clientRepository.checkClient(dto.phone_number)) {
-      throw new AlreadyRegisteredException()
+      throw new AlreadyRegisteredException();
     }
     return this.clientRepository.createClient(dto);
   }
 
-  async login(phoneNumber: string, password: string) {
+  async login (phoneNumber: string, password: string) {
     const client = await this.clientRepository.checkClient(phoneNumber);
     if (client?.password !== password) {
       throw new UnauthorizedException('Incorrect phone number or password');
     }
-    const payload = {sub: client.client_id, username: client.first_name}
+    const payload = { sub: client.client_id, username: client.first_name };
     return {
       access_token: await this.jwtService.signAsync(payload),
-    }
+    };
   }
 }
