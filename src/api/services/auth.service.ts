@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ClientsRepository } from '../database/repositories/ClientsRepository';
+import { ClientsRepository } from '../../database/repositories/ClientsRepository';
 import { CreateClientDTO } from '../dtos/CreateClientDTO';
-import { AlreadyRegisteredException } from '../utils/exceptions/AlreadyRegisteredException';
+import { AlreadyRegisteredException } from '../../utils/exceptions/AlreadyRegisteredException';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

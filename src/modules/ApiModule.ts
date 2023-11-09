@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { DoctorsModule } from '../doctors/doctors.module';
-import { AuthModule } from '../auth/auth.module';
-import { ReviewsModule } from '../reviews/reviews.module';
-import { AppointmentsModule } from '../appointments/appointments.module';
-import { ClientsModule } from '../clients/clients.module';
+import { DoctorsModule } from './doctors.module';
+import { AuthModule } from './auth.module';
+import { ReviewsModule } from './reviews.module';
+import { AppointmentsModule } from './appointments.module';
+import { ClientsModule } from './clients.module';
 
 @Module({
   imports: [

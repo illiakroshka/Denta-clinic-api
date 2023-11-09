@@ -1,6 +1,6 @@
 import {Controller, Get, Param, ParseIntPipe, Post, Request, UseGuards} from '@nestjs/common';
-import { AppointmentsService } from './appointments.service';
-import { AuthGuard } from '../security/auth.guard';
+import { AppointmentsService } from '../services/appointments.service';
+import { AuthGuard } from '../../security/auth.guard';
 
 @Controller('appointments')
 export class AppointmentsController {

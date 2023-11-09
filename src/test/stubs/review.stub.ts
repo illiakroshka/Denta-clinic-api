@@ -1,4 +1,4 @@
-import {CreateReviewsDto} from "../../dtos/ReviewsDTO";
+import {CreateReviewsDto} from "../../api/dtos/ReviewsDTO";
 
 export const reviewStub = (): CreateReviewsDto => {
   return {

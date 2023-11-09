@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AppointmentRepository } from '../database/repositories/AppointmentRepository';
-import { ClientsService } from '../clients/clients.service';
+import { AppointmentRepository } from '../../database/repositories/AppointmentRepository';
+import { ClientsService } from './clients.service';
 
 @Injectable()
 export class AppointmentsService {

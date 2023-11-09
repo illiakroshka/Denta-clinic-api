@@ -9,11 +9,11 @@ import {
   Request,
   UseGuards, UsePipes, ValidationPipe
 } from '@nestjs/common';
-import { ReviewsService } from './reviews.service';
-import { AuthGuard } from '../security/auth.guard';
-import { ReviewsMapper } from '../mappers/ReviewsMapper';
+import { ReviewsService } from '../services/reviews.service';
+import { AuthGuard } from '../../security/auth.guard';
+import { ReviewsMapper } from '../../mappers/ReviewsMapper';
 import { CreateReviewsDto } from '../dtos/ReviewsDTO';
-import { DoctorsService } from '../doctors/doctors.service';
+import { DoctorsService } from '../services/doctors.service';
 
 @Controller('reviews')
 export class ReviewsController {

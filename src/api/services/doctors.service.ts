@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DoctorsRepository } from '../database/repositories/DoctorsRepository';
+import { DoctorsRepository } from '../../database/repositories/DoctorsRepository';
 
 @Injectable()
 export class DoctorsService {

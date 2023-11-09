@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ReviewsRepository } from '../database/repositories/ReviewsRepository';
-import { DoctorsService } from '../doctors/doctors.service';
+import { ReviewsRepository } from '../../database/repositories/ReviewsRepository';
+import { DoctorsService } from './doctors.service';
 
 @Injectable()
 export class ReviewsService {
