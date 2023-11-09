@@ -5,17 +5,17 @@ export class CreateClientDTO {
 
   @ApiProperty()
   @IsString()
-  first_name: string;
+    first_name: string;
 
   @ApiProperty()
   @IsString()
-  last_name: string;
+    last_name: string;
 
   @ApiProperty()
   @IsString()
-  phone_number: string;
+    phone_number: string;
 
   @ApiProperty()
   @IsString()
-  password: string
+    password: string;
 }
