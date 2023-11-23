@@ -1,5 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { DoctorsService } from '../services/doctors.service';
+import { DoctorByIdPipe } from '../pipes/DoctorByIdPipe';
 
 @Controller('doctors')
 export class DoctorsController {
@@ -14,7 +15,7 @@ export class DoctorsController {
 
   @Get('/:doctorId')
   async getDoctor (
-    @Param('doctorId', ParseIntPipe) doctorId: number,
+    @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number,
   ) {
     return this.doctorService.getDoctor(doctorId);
   }

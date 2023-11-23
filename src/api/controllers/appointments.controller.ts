@@ -1,6 +1,7 @@
 import { Controller, Get, Param, ParseIntPipe, Post, Request, UseGuards } from '@nestjs/common';
 import { AppointmentsService } from '../services/appointments.service';
 import { AuthGuard } from '../../security/auth.guard';
+import { DoctorByIdPipe } from '../pipes/DoctorByIdPipe';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -24,7 +25,7 @@ export class AppointmentsController {
 
   @Get('/doctors/:doctorId')
   async getDoctorAppointments (
-    @Param('doctorId', ParseIntPipe) doctorId: number
+    @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number
   ) {
     const DoctorAppointments = await this.appointmentsService.getDoctorsAppointments(doctorId);
     return DoctorAppointments;

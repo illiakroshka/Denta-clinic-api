@@ -16,6 +16,7 @@ import { AuthGuard } from '../../security/auth.guard';
 import { ReviewsMapper } from '../../mappers/ReviewsMapper';
 import { CreateReviewsDto } from '../dtos/ReviewsDTO';
 import { DoctorsService } from '../services/doctors.service';
+import { DoctorByIdPipe } from '../pipes/DoctorByIdPipe';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -26,7 +27,9 @@ export class ReviewsController {
   ) {}
 
   @Get('/:doctorId')
-  async getDoctorsReviews (@Param('doctorId', ParseIntPipe) doctorId: number) {
+  async getDoctorsReviews (
+    @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number
+  ) {
     const doctorReviews = await this.reviewsService.getDoctorsReviews(doctorId);
     return this.reviewMapper.getDoctorReviews(doctorReviews);
   }
@@ -34,7 +37,7 @@ export class ReviewsController {
   @UseGuards(AuthGuard)
   @Delete('/:doctorId/:reviewId')
   async deleteReview (
-    @Param('doctorId', ParseIntPipe) doctorId: number,
+    @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number,
     @Param('reviewId', ParseIntPipe) reviewId: number,
     @Request() req: any,
   ) {
@@ -46,7 +49,7 @@ export class ReviewsController {
   @UsePipes(new ValidationPipe())
   @Post('/:doctorId')
   async createReview (
-    @Param('doctorId', ParseIntPipe) doctorId: number,
+    @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number,
     @Body() dto: CreateReviewsDto,
     @Request() req: any,
   ) {
