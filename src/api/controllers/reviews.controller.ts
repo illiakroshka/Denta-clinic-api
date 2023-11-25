@@ -53,8 +53,6 @@ export class ReviewsController {
     @Body() dto: CreateReviewsDto,
     @Request() req: any,
   ) {
-    await this.doctorsService.getDoctor(doctorId);
-    const review = await this.reviewsService.createReview(dto, doctorId, req.user.sub);
-    return review;
+    return this.reviewsService.createReview(dto, doctorId, req.user.sub);
   }
 }

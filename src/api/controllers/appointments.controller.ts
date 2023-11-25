@@ -2,6 +2,7 @@ import { Controller, Get, Param, ParseIntPipe, Post, Request, UseGuards } from '
 import { AppointmentsService } from '../services/appointments.service';
 import { AuthGuard } from '../../security/auth.guard';
 import { DoctorByIdPipe } from '../pipes/DoctorByIdPipe';
+import { AppointmentByIdPipe } from '../pipes/AppointmentByIdPipe';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -11,33 +12,29 @@ export class AppointmentsController {
 
   @Get()
   async getActiveAppointments () {
-    const ActiveAppointments = await this.appointmentsService.getActiveAppointments();
-    return ActiveAppointments;
+    return this.appointmentsService.getActiveAppointments();
   }
 
   @Get('/:appointmentId')
   async getAppointment (
-   @Param('appointmentId', ParseIntPipe) appointmentId: number
+   @Param('appointmentId', ParseIntPipe, AppointmentByIdPipe) appointmentId: number
   ) {
-    const appointment = await this.appointmentsService.getAppointment(appointmentId);
-    return appointment;
+    return this.appointmentsService.getAppointment(appointmentId);
   }
 
   @Get('/doctors/:doctorId')
   async getDoctorAppointments (
     @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number
   ) {
-    const DoctorAppointments = await this.appointmentsService.getDoctorsAppointments(doctorId);
-    return DoctorAppointments;
+    return this.appointmentsService.getDoctorsAppointments(doctorId);
   }
 
   @UseGuards(AuthGuard)
   @Post('/:appointmentId')
   async bookAppointment (
-    @Param('appointmentId', ParseIntPipe) appointmentId: number,
+    @Param('appointmentId', ParseIntPipe, AppointmentByIdPipe) appointmentId: number,
     @Request() req,
   ) {
-    const data = await this.appointmentsService.bookAppointment(req.user.sub, appointmentId);
-    return data;
+    return this.appointmentsService.bookAppointment(req.user.sub, appointmentId);
   }
 }
