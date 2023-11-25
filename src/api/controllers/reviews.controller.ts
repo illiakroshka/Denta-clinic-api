@@ -8,8 +8,6 @@ import {
   Post,
   Request,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ReviewsService } from '../services/reviews.service';
 import { AuthGuard } from '../../security/auth.guard';
@@ -46,7 +44,6 @@ export class ReviewsController {
   }
 
   @UseGuards(AuthGuard)
-  @UsePipes(new ValidationPipe())
   @Post('/:doctorId')
   async createReview (
     @Param('doctorId', ParseIntPipe, DoctorByIdPipe) doctorId: number,
