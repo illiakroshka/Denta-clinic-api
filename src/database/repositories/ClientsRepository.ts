@@ -8,20 +8,15 @@ export class ClientsRepository {
     private prisma: DatabaseService,
   ) {}
 
-  async createClient (dto) {
+  async create (data: Prisma.clientsUncheckedCreateInput) {
     return this.prisma.clients.create({
-      data: {
-        first_name: dto.first_name,
-        last_name: dto.last_name,
-        phone_number: dto.phone_number,
-        password: dto.password,
-      },
+      data,
     });
   }
 
-  async checkClient (phoneNumber: string) {
+  async findFirst (data) {
     return this.prisma.clients.findFirst({
-      where: { phone_number: phoneNumber },
+      ...data,
     });
   }
 

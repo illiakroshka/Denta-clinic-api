@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClientsRepository } from '../../database/repositories/ClientsRepository';
+import { CreateClientDTO } from '../dtos/CreateClientDTO';
 
 @Injectable()
 export class ClientsService {
@@ -7,17 +8,33 @@ export class ClientsService {
     private clientRepository: ClientsRepository
   ) {}
 
+  async checkClient (phoneNumber: string) {
+    return this.clientRepository.findFirst({
+      where: {
+        phone_number: phoneNumber,
+      },
+    });
+  }
+
+  async createClient (data: CreateClientDTO) {
+    return this.clientRepository.create({
+      first_name: data.first_name,
+      last_name: data.last_name,
+      phone_number: data.phone_number,
+      password: data.password,
+    });
+  }
+
   async getProfile (clientId: number) {
-    const profile = await this.clientRepository.findMany({
+    return this.clientRepository.findMany({
       where: {
         client_id: clientId,
       },
     });
-    return profile;
   }
 
   async addAppointment (clientId: number, appointmentId: number) {
-    const data = await this.clientRepository.update({
+    return this.clientRepository.update({
       data: {
         appointment_id: appointmentId,
       },
@@ -25,6 +42,5 @@ export class ClientsService {
         client_id: clientId,
       },
     });
-    return data;
   }
 }
