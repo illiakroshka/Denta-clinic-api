@@ -1,25 +1,21 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ClientsRepository } from '../../database/repositories/ClientsRepository';
 import { CreateClientDTO } from '../dtos/CreateClientDTO';
-import { AlreadyRegisteredException } from '../../utils/exceptions/AlreadyRegisteredException';
 import { JwtService } from '@nestjs/jwt';
+import { ClientsService } from './clients.service';
 
 @Injectable()
 export class AuthService {
   constructor (
-    private clientRepository: ClientsRepository,
+    private clientService: ClientsService,
     private jwtService: JwtService,
   ) {}
 
   async createClient (dto: CreateClientDTO) {
-    if (await this.clientRepository.checkClient(dto.phone_number)) {
-      throw new AlreadyRegisteredException();
-    }
-    return this.clientRepository.createClient(dto);
+    return this.clientService.createClient(dto);
   }
 
   async login (phoneNumber: string, password: string) {
-    const client = await this.clientRepository.checkClient(phoneNumber);
+    const client = await this.clientService.checkClient(phoneNumber);
     if (client?.password !== password) {
       throw new UnauthorizedException('Incorrect phone number or password');
     }
