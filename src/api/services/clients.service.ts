@@ -16,12 +16,12 @@ export class ClientsService {
     });
   }
 
-  async createClient (data: CreateClientDTO) {
+  async createClient (data: CreateClientDTO, password: string) {
     return this.clientRepository.create({
       first_name: data.first_name,
       last_name: data.last_name,
       phone_number: data.phone_number,
-      password: data.password,
+      password: password,
     });
   }
 
